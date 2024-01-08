@@ -3,7 +3,7 @@ services:
   askpdf:
     build: ./backend
     ports:
-      - "3334:3333"
+      - "3333:3333"
     volumes:
       - ./backend:/app
     restart: always
