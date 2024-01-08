@@ -1,6 +1,9 @@
-# pdfGPT Plugin for ChatGPT
+# pdfGPT Plugin for WenxinYiyan
 
-This repository contains a plugin for ChatGPT based on the [pdfGPT](https://github.com/bhaskatripathi/pdfGPT) repository by [bhaskatripathi](https://github.com/bhaskatripathi). This plugin allows ChatGPT to interact with the contents of a PDF file, effectively turning your PDF files into a chatbot.
+This repository contains a plugin for Wenxinyiyan based on the [pdfGPT](https://github.com/bhaskatripathi/pdfGPT) repository by [bhaskatripathi](https://github.com/bhaskatripathi). 
+This repo is also based on xx
+
+This plugin allows ChatGPT to interact with the contents of a PDF file, effectively turning your PDF files into a chatbot.
 
 ## What does it do?
 
@@ -16,6 +19,7 @@ You can easily run the pdfGPT Plugin using Docker. Simply use the following comm
 
 ```
 docker-compose up -d
+docker run -it -p 3333:3333
 ```
 
 This will start the plugin in detached mode, allowing it to run in the background. Upon initialization, the plugin will open port 3334.
@@ -23,3 +27,6 @@ This will start the plugin in detached mode, allowing it to run in the backgroun
 ## Acknowledgements
 
 This plugin is based on the [pdfGPT](https://github.com/bhaskatripathi/pdfGPT) repository by [bhaskatripathi](https://github.com/bhaskatripathi). I would like to express my gratitude for their work in creating an open-source solution that allows us to turn PDF files into a chatbot.
+
+
+### Depoly Tips
