@@ -1,4 +1,5 @@
-flask
+Flask
+flask-restful
 numpy
 Pillow
 PyMuPDF

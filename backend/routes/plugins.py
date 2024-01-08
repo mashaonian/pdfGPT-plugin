@@ -38,6 +38,8 @@ def serve_file(path):
     return send_from_directory('static', path)
 
 
+
+
 @plugins.route('/<path:path>', methods=['GET'])
 def serve_file2(path):
     return send_from_directory('static', path)
