@@ -2,25 +2,25 @@ openapi: 3.0.1
 info:
   title: Ask to PDF
   description: 一个允许用户使用文心一言加载和查询 PDF 的插件。
-  version: 'v1'
+  version: 1.0.0
 servers:
-  - url: http://localhost:3333
+  - url: http://127.0.0.1:3333
 paths:
   /pdf/load:
     post:
       operationId: loadPdf
-      summary: Load a PDF document
+      summary: 解析用户的url
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/loadPdfRequest"
+              $ref: "#/components/schemas/loadPdf"
       responses:
         "200":
           description: 加载文件成功！
           content:
-            application/json:
+            text/event-stream:
               schema:
                   $ref: "#/components/schemas/messageResponse"
   /pdf/query:
@@ -40,10 +40,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/queryPdfResponse"
+      #  x-history:
+      #     description: 标记在requestBody中mediaType对应的content中用name所标记的字段接收一言交互历史的字段，其内容格式是[{"role":"","content":""},{"role":"","content":""},...] 
+      #     mediaType: application/json
+      #     name: "yiyan_info"
+      #     type: string
 
 components:
   schemas:
-    loadPdfRequest:
+    loadPdf:
       type: object
       required: [url]
       properties:
@@ -52,19 +57,15 @@ components:
           description: 远程文件url地址，用<url><\url>包含
     queryPdfRequest:
       type: object
-      required:
-        - query
-        - pdf_url
+      required: [query,url]
       properties:
         query:
           type: string
-          description: The query or question to ask based on the PDF document.
-          required: true
-        pdf_url:
+          description: 根据 PDF 文档提出的查询或问题。
+          # required: true
+        url:
           type: string
-          format: uri
-          description: The temporary URL of the PDF document that is already loaded.
-          required: true
+          description: 远程文件url地址，用<url><\url>包含
     queryPdfResponse:
       type: object
       properties:
@@ -73,7 +74,14 @@ components:
           items:
             type: string
           description: The list of text chunks from the PDF document that are relevant to the user's query.
-  # /documentation/{service}:
+    messageResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+            type: string
+            description: 回复信息
+  #/documentation/{service}:
   #   get:
   #     operationId: getDocumentation
   #     summary: Get the PDF URLs of a Huawei Cloud service documentation
