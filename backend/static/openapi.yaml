@@ -26,7 +26,7 @@ paths:
   /pdf/query:
     post:
       operationId: queryPdf
-      summary: Query a loaded PDF document
+      summary: 提取问题
       requestBody:
         required: true
         content:
@@ -40,11 +40,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/queryPdfResponse"
-      #  x-history:
-      #     description: 标记在requestBody中mediaType对应的content中用name所标记的字段接收一言交互历史的字段，其内容格式是[{"role":"","content":""},{"role":"","content":""},...] 
-      #     mediaType: application/json
-      #     name: "yiyan_info"
-      #     type: string
+      x-history:
+        description: 标记在requestBody中mediaType对应的content中用name所标记的字段接收一言交互历史的字段，其内容格式是[{"role":"","content":""},{"role":"","content":""},...] 
+        mediaType: application/json
+        name: "yiyan_info"
+        type: string
 
 components:
   schemas:
@@ -57,15 +57,15 @@ components:
           description: 远程文件url地址，用<url><\url>包含
     queryPdfRequest:
       type: object
-      required: [query,url]
+      required: [query]
       properties:
         query:
           type: string
-          description: 根据 PDF 文档提出的查询或问题。
+          description: 问题
           # required: true
-        url:
-          type: string
-          description: 远程文件url地址，用<url><\url>包含
+        yiyan_info:
+          type: string 
+          description: 历史信息
     queryPdfResponse:
       type: object
       properties:
@@ -73,7 +73,7 @@ components:
           type: array
           items:
             type: string
-          description: The list of text chunks from the PDF document that are relevant to the user's query.
+          description: PDF 文档中与用户查询相关的文本块列表。
     messageResponse:
       type: object
       required: [message]
