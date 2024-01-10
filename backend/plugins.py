@@ -38,10 +38,10 @@ def make_json_response(data, status_code=200):
 #             substr = content.split('<url>')
 #             url = substr[1].split('<url>')[0]
 #     return url
-def get_url_from_history(yiyan_info_json):
+def extract_info_from_request_body(request_body_json):
     # 解析 JSON 字符串
-    yiyan_info = json.loads(yiyan_info_json)
-    
+    yiyan_info = json.loads(request_body_json["yiyan_info"])
+    query = request_body_json["query"]
     # 遍历列表中的每个项目
     for item in yiyan_info:
         # 检查角色和内容
@@ -53,7 +53,9 @@ def get_url_from_history(yiyan_info_json):
             start_index = content.find('<url>') + len('<url>')
             end_index = content.find('</url>', start_index)
             url = content[start_index:end_index]
-            return url
+            break
+
+    return url,query
 
 @plugins.route("/pdf/load", methods=["POST"])
 async def load_pdf():
@@ -71,36 +73,26 @@ async def load_pdf():
 @plugins.route("/pdf/query", methods=["POST"])
 async def query_pdf():
     # url = request.json.get('url',"")
-    query = request.json.get('query',"")
+    # query = request.json.get('query',"")
     # 提问不再需要上传url，要把以前的url链接在每次提问中提取出来：
-    yiyan_info_ori = request.json.get('yiyan_info', "")
-    url = get_url_from_history(yiyan_info_ori)
+    # query, yiyan_info_ori = request.json.get('yiyan_info', "")
+    request_body = request.get_json()
+    url,query = extract_info_from_request_body(request_body)
     logging.info(url)
 
     import requests
     response = requests.get(url)
     with open('backend\corpus.pdf',"wb") as file:
         file.write(response.content)
-    file.close()
     pdf.load_recommender('backend\corpus.pdf')
     answer = pdf.generate_answer(query)
+    page_number = answer.split('no. ')[1].split(']')[0]
+    answer_relavent = answer.split('"')[1]
     timestamp = str(time.time())
     def event_stream():
-        json_data1 = {"errcode":"0",
-                      "actionName":"正在上传文件",
-                      "actionCentent":"上传文件成功"}
-        yield f"data:{json.dumps(json_data1, ensure_ascii=False)}\n\n"
-        time.sleep(1)
-        json_data2 = {"errCode": "0",
-                      "actionName": "正在解析文件",
-                      "actionContent": "解析文件完成"}
-        yield f"data:{json.dumps(json_data2, ensure_ascii=False)}\n\n"
-        time.sleep(1)
-        json_data_result = {"errCode": "0", 
-                            "actionName": "正在输出回答", 
-                            "actionContent": "输出回答完成", 
-                            "answer": answer, 
-                            "prompt": "根据答案（answer）生成答案的大纲"}
+        json_data_result = {"answer": answer_relavent,
+                            "page_id":page_number, 
+                            "prompt": "任务：根据答案（answer）生成答案的大纲；输出：大纲为：（您的回答）+ [参引页面：page_id]，注意请传入pageid的实参不要直接输出page_id"}
         logging.info(answer)
         yield f"data:{json.dumps(json_data_result, ensure_ascii=False)}\n\n"
     return plugins.response_class(event_stream(), mimetype='text/event-stream')

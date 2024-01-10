@@ -67,7 +67,7 @@ class SemanticSearch:
         self.use = hub.load('K:\model\encoder')
         self.fitted = False
 
-    def fit(self, data, batch=2000, n_neighbors=10):
+    def fit(self, data, batch=2000, n_neighbors=1):
         self.data = data
         self.embeddings = self.get_text_embedding(data, batch=batch)
         n_neighbors = min(n_neighbors, len(self.embeddings))

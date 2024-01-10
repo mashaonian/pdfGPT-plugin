@@ -33,3 +33,26 @@ A:
 1. refer to   [RAG procedure](https://mp.weixin.qq.com/s/hx84sb7c0GF5Xw2-mU7apQ) to understand how it works
 2. refer to [RAG demo](https://mp.weixin.qq.com/s/RONG0mK07ZHrQZ5mgr31cg) to understand how to code
 3. refer to [RAG improvements](https://mp.weixin.qq.com/s/LHCfxk5Z2h3g5jTda-c8TA) to know how to improve a RAG application
+
+## examples：
+
+
+What did the study investigate?
+
+Can you provide a summary of this paper?
+
+what are the methodologies used in this study?
+
+what are the data intervals used in this study? Give me the start dates and end dates?
+
+what are the main limitations of this study?
+
+what are the main shortcomings of this study?
+
+what are the main findings of the study?
+
+what are the main results of the study?
+
+what are the main contributions of this study?
+
+what is the conclusion of this paper?
